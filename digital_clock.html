@@ -1,0 +1,147 @@
+<html>
+    <head>
+        <title>Digital clock</title>
+        <style>
+            *{
+                margin:0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            body{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                background-color: #dbe4e6;
+            }
+            .clock{
+                width: 520px;
+                padding: 40px;
+                background-color: #f3f3f3;
+                box-shadow: #808080;
+                border-radius: 8px;
+            }
+            .clock .display{
+                padding: 40px 10px 10px;
+                border-radius: 6px;
+                background-color: #dddddd;
+                box-shadow: 0 1px 1px rgba(0,0,0,0.08) inset,
+                            0 1px 1px #fafafa;
+                position: relative;
+            }
+            .clock .display .weekdays{
+                font-size: 15px;
+                font-weight: 6px;
+                width: 100%;
+                position: absolute;
+                top: 10px;
+                left: 0;
+                text-align: center;
+                font-family: 'Text Me One',sans-serif;
+            }
+            .weekdays span{
+                padding: 0 10px;
+                opacity: 0.2;
+            }
+            .weekdays span.active
+            {
+                opacity: 1;
+            }
+            .display .timedisplay
+            {
+                display:flex;
+                justify-content: center;
+            }
+            .timedisplay .time{
+                font-size: 80px;
+                display: flex;
+                justify-content: center;
+                letter-spacing: 3px;
+                font-family: 'Orbitron', sans-serif;
+            }
+            .timedisplay .format
+            {
+                font-size: 30px;
+                margin-top: 32px;
+                margin-left: 10px;
+                font-family: 'Text Me One',sans-serif;
+            }
+            .time .dot
+            {
+                animation:blinker 1s linear infinite;
+            }
+            @keyframes blinker
+            {
+                25%{opacity: 0;}
+                
+            }
+            .clock{
+                background-color:rgb(67, 132, 132);
+            }
+            .display{
+                background:linear-gradient(to right,rgb(209, 81, 103),rgb(82, 209, 50));
+            }
+            
+        </style>
+        <script language="javascript">
+            function digitalclock()
+            {
+                let dateFunction=new Date()
+                let day=dateFunction.getDay()
+                let hours=dateFunction.getHours()
+                let minutes=dateFunction.getMinutes()
+                let seconds=dateFunction.getSeconds()
+                let timeformat='AM'
+
+                if (hours >= 12) {
+                    timeformat = 'PM';
+                    hours = hours > 12 ? hours - 12 : hours;
+                } else if (hours === 0) {
+                    hours = 12;
+                }
+
+                hours=hours < 10 ? '0'+ hours : hours
+                minutes = minutes < 10 ? '0' + minutes : minutes
+                seconds =seconds <10 ? '0' + seconds : seconds
+
+                document.querySelector('.hours').innerHTML=hours
+                document.querySelector('.minutes').innerHTML=minutes
+                document.querySelector('.seconds').innerHTML=seconds
+                document.querySelector('.format').innerHTML=timeformat
+
+                const weekdays = document.querySelectorAll('.weekdays span');
+                weekdays.forEach((span, index) => {
+                  span.classList.toggle('active', index === day);
+                });
+                
+               
+            }
+            
+            setInterval(digitalclock,1000)
+        </script>
+    </head>
+    <body>
+          <div class="clock">
+            <div class="display">
+                <div class="weekdays">
+                    <span>Sun</span>
+                    <span>Mon</span>
+                    <span>Tue</span>
+                    <span>Wed</span>
+                    <span>Thu</span>
+                    <span>Fri</span>
+                    <span>Sat</span>
+                    
+                </div>
+                <div class="timedisplay">
+                    <div class="time">
+                         <span class="hours">00</span><span class="dot">:</span>
+                         <span class="minutes">00</span><span class="dot">:</span>
+                         <span class="seconds">00</span> 
+                    </div>
+                    <span class="format">AM</span>
+                </div>
+            </div>
+          </div>
+    </body>
+</html>

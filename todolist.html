@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>To-do-list</title>
+    <style>
+        body {
+            background-color: rgb(85, 133, 192);
+        }
+
+        .container {
+            padding-top: 10px;
+            background-color: rgba(36, 90, 15, 0.487);
+            height: 400px;
+            width: 300px;
+            justify-content: center;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            margin-left: 40%;
+            margin-top: 5%;
+            color: azure;
+            font-size: 20px;
+            border-radius: 20px;
+            box-shadow: 5px 5px 5px rgba(20, 53, 115, 0.785);
+        }
+
+        .b {
+            background-color: lightblue;
+            border-radius: 5px;
+            font-size: 20px;
+        }
+
+        
+        .close {
+            float: right;
+            cursor: pointer;
+            margin-left: 5px;
+            background-color: red;
+            border-radius: 4px;
+            padding-left: 10px;
+            padding-right: 10px;
+            
+        }
+
+        .edit {
+            float: right;
+            cursor: pointer;
+            background-color: rgb(20, 20, 168);
+            border-radius: 5px;
+            cursor: pointer;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+        .edit:hover{
+            background-color: rgb(157, 80, 177);
+
+        }
+        ul
+        {
+            line-height:30px;
+            padding-inline-end: 20px;
+            padding-inline-start:45px ;
+            display: grid;
+            gap: 10px;
+        }
+        h2{
+            color: whitesmoke;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+    </style>
+</head>
+<body align="center">
+    <div class="container" align="center">
+        <h2><i>To-Do List</i></h2>
+        <input type="text" id="myInput" placeholder="New task...">
+        <button onclick="newElement()" class="b">Add</button>
+        <ul id="myUL" ></ul>
+    </div>
+
+    <script>
+      
+        window.onload = function() {
+            loadTasks();
+        };
+
+        function newElement() {
+            var inputValue = document.getElementById("myInput").value;
+            if (inputValue === '') {
+                alert("You must write something!");
+            } else {
+                var li = document.createElement("li");
+                var t = document.createTextNode(inputValue);
+                li.appendChild(t);
+                document.getElementById("myUL").appendChild(li);
+                
+                
+               
+                saveTask(inputValue);
+
+                document.getElementById("myInput").value = "";
+
+                var spanClose = document.createElement("SPAN");
+                var txtClose = document.createTextNode("\u00D7");
+                spanClose.className = "close";
+                spanClose.appendChild(txtClose);
+                li.appendChild(spanClose);
+
+             
+                spanClose.onclick = function() {
+                    var div = this.parentElement;
+                    div.style.display = "none";
+
+                  
+                    removeTask(div.firstChild.nodeValue);
+                }
+                
+
+                var spanEdit = document.createElement("SPAN");
+                var txtEdit = document.createTextNode("Edit");
+                spanEdit.className = "edit";
+                spanEdit.appendChild(txtEdit);
+                li.appendChild(spanEdit);
+
+             
+                spanEdit.onclick = function() {
+                    var newText = prompt("Edit task:", li.firstChild.nodeValue);
+                    if (newText !== null) {
+                        li.firstChild.nodeValue = newText;
+
+                     
+                        updateTask(li.firstChild.nodeValue, newText);
+                    }
+                }
+            }
+        }
+
+       
+        function saveTask(task) {
+            var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            tasks.push(task);
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+     
+        function removeTask(task) {
+            var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            var index = tasks.indexOf(task);
+            if (index !== -1) {
+                tasks.splice(index, 1);
+            }
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+     
+        function updateTask(oldTask, newTask) {
+            var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            var index = tasks.indexOf(oldTask);
+            if (index !== -1) {
+                tasks[index] = newTask;
+            }
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+      
+        function loadTasks() {
+            var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            var ul = document.getElementById('myUL');
+            tasks.forEach(function(task) {
+                var li = document.createElement('li');
+                var t = document.createTextNode(task);
+                li.appendChild(t);
+                ul.appendChild(li);
+
+                var spanClose = document.createElement("SPAN");
+                var txtClose = document.createTextNode("\u00D7");
+                spanClose.className = "close";
+                spanClose.appendChild(txtClose);
+                li.appendChild(spanClose);
+
+             
+                spanClose.onclick = function() {
+                    var div = this.parentElement;
+                    div.style.display = "none";
+                    removeTask(div.firstChild.nodeValue);
+                }
+
+                var spanEdit = document.createElement("SPAN");
+                var txtEdit = document.createTextNode("Edit");
+                spanEdit.className = "edit";
+                spanEdit.appendChild(txtEdit);
+                li.appendChild(spanEdit);
+
+             
+                spanEdit.onclick = function() {
+                    var newText = prompt("Edit task:", li.firstChild.nodeValue);
+                    if (newText !== null) {
+                        li.firstChild.nodeValue = newText;
+                        updateTask(li.firstChild.nodeValue, newText);
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
